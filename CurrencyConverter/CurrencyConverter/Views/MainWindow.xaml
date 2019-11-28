@@ -1,0 +1,92 @@
+﻿<Window x:Class="CurrencyConverter.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CurrencyConverter.ViewModels"
+        mc:Ignorable="d" 
+        Title="MainWindow" Height="500" Width="700">
+
+    <Window.DataContext>
+        <local:MainViewModel/>
+    </Window.DataContext>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <!--Title-->
+        <TextBlock Text="Конвертер валют"
+                   Margin="5"
+                   HorizontalAlignment="Center"
+                   FontWeight="Bold"/>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <!--Course-->
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                
+                <!--Sale-->
+                <StackPanel Orientation="Horizontal">
+                    <RadioButton Content="Покупка"
+                                 IsChecked="True"
+                                 Margin="5"/>
+                    <RadioButton Content="Продажа"
+                                 Margin="5"/>
+                </StackPanel>
+                
+                <!--Sum-->
+                <StackPanel Grid.Row="1" 
+                            Orientation="Horizontal">
+                    <TextBlock Text="Сумма"
+                               Margin="5"/>
+                    <TextBox Height="20"
+                             Width="100"
+                             Margin="5"/>
+                    <ComboBox Margin="5"/>
+                </StackPanel>
+
+                <!--Banks rate-->
+                <StackPanel Grid.Row="2" 
+                            Orientation="Horizontal">
+                    <TextBlock Text="По курсу:"
+                               Margin="5"/>
+                    <ComboBox Margin="5" 
+                              Width="150"
+                              ItemsSource="{Binding Organizations}"
+                              >
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Title}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    
+                </StackPanel>
+                
+                <!--Result-->
+                
+                
+            </Grid>
+            
+            
+            
+            
+            
+        </Grid>
+
+    </Grid>
+</Window>
