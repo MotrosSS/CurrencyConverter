@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CurrencyConverter.Infrastructure
 {
-    class Notifier : INotifyPropertyChanged
+    public class Notifier : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
         protected void Notify([CallerMemberName]string propertyName = "")

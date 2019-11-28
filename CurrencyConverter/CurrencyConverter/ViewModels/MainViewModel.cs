@@ -9,19 +9,44 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace CurrencyConverter.ViewModels
 {
-    public class MainViewModel
+    public class MainViewModel : Notifier
     {
         public ObservableCollection<Organization> Organizations { get; set; }
-       
-        public Organization SelectedOrganization { get; set; }
+
+        private double summa;        
+        public double Summa
+        {
+            get => summa;
+            set
+            {
+                summa = value;
+                Notify();
+            }
+        }
+
+
+        public Organization selectedOrganization;
+        public Organization SelectedOrganization
+        {
+            get => selectedOrganization;
+            set
+            {
+                selectedOrganization = value;
+                Notify();
+            }
+        }
 
         public  MainViewModel()
         {
             GetOrganizations();
-        }
+            Organizations = new ObservableCollection<Organization>();
+
+              
+    }
 
 
         #region Methods
@@ -29,8 +54,22 @@ namespace CurrencyConverter.ViewModels
         private async void GetOrganizations()
         {
             FinanceManager financeManager = new FinanceManager();
-            Organizations = await financeManager.GetBanks();
+            foreach (var item in await financeManager.GetBanks())
+            {
+                Organizations.Add(item);
+            } 
         }
+
+        #endregion
+
+        #region Commands
+
+        private ICommand checkRadioButton;
+
+        public ICommand CheckRadioButton => checkRadioButton ?? (checkRadioButton = new RelayCommand(x=>
+        {
+            
+        }));
 
         #endregion
 

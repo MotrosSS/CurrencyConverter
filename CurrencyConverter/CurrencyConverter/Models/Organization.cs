@@ -19,7 +19,7 @@ namespace CurrencyConverter.Models
         public string Id { get; set; }
 
         [JsonProperty(PropertyName = "")]
-        public ObservableCollection<Currenc> Currencies = new ObservableCollection<Currenc>();
+        public ObservableCollection<Currenc> Currencies { get; set; } = new ObservableCollection<Currenc>();
 
        
     }

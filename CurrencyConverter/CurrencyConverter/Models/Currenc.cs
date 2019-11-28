@@ -9,10 +9,10 @@ namespace CurrencyConverter.Models
 {
     public class Currenc
     {
-        public string Name { get; set; }
 
         [JsonProperty(PropertyName = "ask")]
         public float Purchase { get; set; }
+        public string Name { get; set; }
 
         [JsonProperty(PropertyName = "bid")]
         public float Sale { get; set; }
