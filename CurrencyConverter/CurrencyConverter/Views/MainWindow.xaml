@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CurrencyConverter.ViewModels"
         mc:Ignorable="d" 
-        Title="MainWindow" Height="500" Width="600">
+        Title="MainWindow" Height="500" Width="550">
 
     <Window.DataContext>
         <local:MainViewModel/>
@@ -31,104 +31,161 @@
             </Grid.ColumnDefinitions>
 
             <!--Course-->
-            <Grid Margin="5">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
+            <Border BorderBrush="Black"
+                    Margin="5"
+                    BorderThickness="2">
+                <Grid Margin="5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
 
-                <!--Sale-->
-                <StackPanel Orientation="Horizontal">
-                    <RadioButton Content="Покупка"
-                                 IsChecked="True"
+                    <!--Sale-->
+                    <StackPanel Orientation="Horizontal">
+                        <RadioButton Content="Покупка"
                                  Margin="5"
-                                 Command="{Binding CheckRadioButton}"
-                                 />
-                    <RadioButton Content="Продажа"
-                                 Margin="5"/>
-                </StackPanel>
+                                 Command="{Binding CheckPurchaseCommand}"
+                                 IsChecked="True"/>
+                        <RadioButton Content="Продажа"
+                                 Margin="5"
+                                 Command="{Binding CheckSaleCommand}"/>
+                    </StackPanel>
 
-                <!--Sum-->
-                <StackPanel Grid.Row="1" 
+                    <!--Sum-->
+                    <StackPanel Grid.Row="1" 
                             Orientation="Horizontal">
-                    <TextBlock Text="Сумма:"
+                        <TextBlock Text="Сумма:"
                                Margin="5"/>
-                    <TextBox Height="20"
+                        <TextBox Height="20"
                              Width="130"
                              Margin="5"
-                             Text="{Binding Summa}"
+                             Text="{Binding Sum, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                              TextAlignment="Right"/>
-                    <TextBlock Text="UAH"
+                        <TextBlock Text="UAH"
                                Margin="2 7"/>
-                </StackPanel>
+                    </StackPanel>
 
-                <!--Banks rate-->
-                <StackPanel Grid.Row="2" 
+                    <!--Banks rate-->
+                    <StackPanel Grid.Row="2" 
                             Orientation="Horizontal">
-                    <TextBlock Text="По курсу:"
-                               Margin="5"/>
-                    <ComboBox Margin="5" 
-                              Width="140"
-                              ItemsSource="{Binding Organizations}"
-                              SelectedValue="{Binding Id , Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                              DisplayMemberPath="Title"
-                              SelectedValuePath="Id"
-                              SelectedItem="{Binding SelectedOrganization}">
-                    </ComboBox>
-                </StackPanel>
+                        <TextBlock Text="По курсу:"
+                                   Margin="5"/>
+                        <ComboBox Margin="5" 
+                                  Width="140"
+                                  ItemsSource="{Binding Organizations}"
+                                  SelectedItem="{Binding SelectedOrganization, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                  SelectedValue="{Binding !!!!, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                  SelectedValuePath="Id"
+                                  DisplayMemberPath="Title">
+                        </ComboBox>
+                    </StackPanel>
 
-                <!--Result-->
-                <TextBlock Text="Результат:"
+                    <!--Result-->
+                    <TextBlock Text="Результат:"
                                FontWeight="Bold"
                                Margin="5"
                                Grid.Row="3"/>
 
+                    <DataGrid Grid.Row="4" 
+                          
+                          HeadersVisibility="None"
+                          ItemsSource="{Binding Results}"
+                          AutoGenerateColumns="False"
+                          IsReadOnly="True">
+                        <DataGrid.Columns>
 
-                <DataGrid Grid.Row="4" 
-                        HeadersVisibility="None"
-                          ItemsSource="{Binding SelectedOrganization.Currencies}"
-                          AutoGenerateColumns="False">
-                    <DataGrid.Columns>
-                        
-                        <DataGridTemplateColumn>
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock 
-                                         TextAlignment="Right"
-                                         Margin="5 0"/>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-
-                        <DataGridTemplateColumn >
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Name}"
+                            <DataGridTemplateColumn>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Result}"
+                                               TextAlignment="Right"
                                                Margin="5 0"/>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
 
-                        <DataGridTemplateColumn>
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Purchase}"
-                                                Margin="5 0"/>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        
-                    </DataGrid.Columns>
-                </DataGrid>
-                
+                            <DataGridTemplateColumn >
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Name}"
+                                               Margin="5 0"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
 
-            </Grid>
+                            <DataGridTemplateColumn>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding FinalCourse}"
+                                               
+                                               Margin="5 0"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </Border>
+
+            
+            <!--All Banks-->
+            <Border Grid.Column="1"
+                    Margin="5"
+                    BorderBrush="Black"
+                    BorderThickness="2">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Text="Курс валют банков в Украине:"
+                               Margin="5"
+                               FontWeight="Bold"/>
+                    <ComboBox Grid.Row="1"
+                              Margin="5"/>
+
+                    <DataGrid Grid.Row="2"
+                              Margin="5"
+                              IsReadOnly="True">
+                        <DataGrid.Columns>
+                            
+                            <DataGridTemplateColumn Header="Банк"
+                                                    Width="154">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn Header="Покупка">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn Header="Продажа">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                        </DataGrid.Columns>
+                    </DataGrid>
 
 
-
+                </Grid>
+            </Border>
 
 
         </Grid>

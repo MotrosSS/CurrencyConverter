@@ -30,11 +30,11 @@ namespace CurrencyConverter.Infrastructure
                 {
                     Organization organization = item.ToObject<Organization>();
                     IList<JToken> jtoken = item["currencies"].Children().ToList();
-                    foreach (JProperty rez in jtoken)
+                    foreach (JProperty res in jtoken)
                     {
                         Currenc currenc = new Currenc();
-                        currenc = rez.Value.ToObject<Currenc>();
-                        currenc.Name = rez.Name;
+                        currenc = res.Value.ToObject<Currenc>();
+                        currenc.Name = res.Name;
                         organization.Currencies.Add(currenc);
                     }
                     banks.Add(organization);
@@ -42,5 +42,28 @@ namespace CurrencyConverter.Infrastructure
                 return banks;
             });
         }
+
+        //public Task<ObservableCollection<CourseTitle>> GetExchangeRates()
+        //{
+        //    return Task.Run(() =>
+        //    {
+        //        ObservableCollection<CourseTitle> results = new ObservableCollection<CourseTitle>();
+
+        //        string json = networkManager.GetJson();
+        //        JObject obj = JObject.Parse(json);
+        //        IList<JToken> currencies = obj["currencies"].Children().ToList();
+
+        //        foreach(JProperty res in currencies)
+        //        {
+        //            CourseTitle calculation = new CourseTitle
+        //            {
+        //                Abbreviation = res.Name,
+        //                DecodingAbbreviations = res.Value.ToObject<CourseTitle>().ToString()
+        //            };
+        //            results.Add(calculation);
+        //        }
+        //        return results;
+        //    });
+        //}
     }
 }

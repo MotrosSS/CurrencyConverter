@@ -71,6 +71,8 @@
     <Compile Include="Infrastructure\NetworkManager.cs" />
     <Compile Include="Infrastructure\Notifier.cs" />
     <Compile Include="Infrastructure\RelayCommand.cs" />
+    <Compile Include="Models\CalculationResult.cs" />
+    <Compile Include="Models\CourseTitle.cs" />
     <Compile Include="Models\Currenc.cs" />
     <Compile Include="Models\Organization.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />

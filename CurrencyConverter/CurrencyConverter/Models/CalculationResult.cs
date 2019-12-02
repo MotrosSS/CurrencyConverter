@@ -1,5 +1,4 @@
 ﻿using CurrencyConverter.Infrastructure;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,13 +7,14 @@ using System.Threading.Tasks;
 
 namespace CurrencyConverter.Models
 {
-    public class Currenc : Notifier
+    public class CalculationResult : Notifier
     {
         private string name;
-        private float purchase;
-        private float sale;
+        private float result;
+        private float finalCourse;
 
         #region Properties
+
         public string Name
         {
             get => name;
@@ -24,31 +24,26 @@ namespace CurrencyConverter.Models
                 Notify();
             }
         }
-
-        [JsonProperty(PropertyName = "ask")]
-        public float Purchase
+        public float Result
         {
-            get => purchase;
+            get => result;
             set
             {
-                purchase = value;
+                result = value;
+                Notify();
+            }
+        }
+        public float FinalCourse
+        {
+            get => finalCourse;
+            set
+            {
+                finalCourse = value;
                 Notify();
             }
         }
 
-        [JsonProperty(PropertyName = "bid")]
-        public float Sale
-        {
-            get => sale;
-            set
-            {
-                sale = value;
-                Notify();
-            }
-        }
 
-        
         #endregion
-
     }
 }

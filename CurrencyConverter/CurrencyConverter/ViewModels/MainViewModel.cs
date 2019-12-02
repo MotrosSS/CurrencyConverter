@@ -10,44 +10,54 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Text.RegularExpressions;
+using System.Windows;
 
 namespace CurrencyConverter.ViewModels
 {
     public class MainViewModel : Notifier
     {
-        public ObservableCollection<Organization> Organizations { get; set; }
+        public Organization selectedOrganization;
+        public bool flag;
+        private float sum;
 
-        private double summa;        
-        public double Summa
+        #region Properties
+        public ObservableCollection<Organization> Organizations { get; set; }
+        public ObservableCollection<CalculationResult> Results { get; set; }
+        public ObservableCollection<CourseTitle> CalculationResults { get; set; }
+
+        public float Sum
         {
-            get => summa;
+            get => sum;
             set
             {
-                summa = value;
+                sum = value;
+                GetRezult(flag);
                 Notify();
             }
         }
-
-
-        public Organization selectedOrganization;
         public Organization SelectedOrganization
         {
             get => selectedOrganization;
             set
             {
                 selectedOrganization = value;
+                GetRezult(flag);
                 Notify();
             }
         }
+        #endregion
 
-        public  MainViewModel()
+        public MainViewModel()
         {
             GetOrganizations();
+            //GetExchangeRates();
             Organizations = new ObservableCollection<Organization>();
-
-              
-    }
-
+            Results = new ObservableCollection<CalculationResult>();
+            CalculationResults = new ObservableCollection<CourseTitle>();
+            selectedOrganization = new Organization();
+            flag = true;
+        }
 
         #region Methods
 
@@ -57,21 +67,75 @@ namespace CurrencyConverter.ViewModels
             foreach (var item in await financeManager.GetBanks())
             {
                 Organizations.Add(item);
-            } 
+            }
+        }
+
+        //private async void GetExchangeRates()
+        //{
+        //    FinanceManager financeManager = new FinanceManager();
+        //    foreach (var item in await financeManager.GetExchangeRates())
+        //    {
+        //        CalculationResults.Add(item);
+        //    }
+        //}
+
+        private void GetRezult(bool flag)
+        {
+            Results.Clear();
+            if (flag)
+                foreach (var item in selectedOrganization.Currencies)
+                {
+                    CalculationResult calculation = new CalculationResult
+                    {
+                        Name = item.Name,
+                        Result = item.Purchase * Sum,
+                        FinalCourse = item.Purchase
+                    };
+                    calculation.Result = (float)Math.Round(calculation.Result, 2);
+                    Results.Add(calculation);
+                }
+
+            else
+                foreach (var item in selectedOrganization.Currencies)
+                {
+                    CalculationResult calculation = new CalculationResult
+                    {
+                        Name = item.Name,
+                        Result = Sum / item.Purchase,
+                        FinalCourse = item.Sale
+                    };
+                    calculation.Result = (float)Math.Round(calculation.Result, 2);
+                    Results.Add(calculation);
+                }
         }
 
         #endregion
 
         #region Commands
 
-        private ICommand checkRadioButton;
+        private ICommand checkPurchaseCommand;
+        private ICommand checkSaleCommand;
 
-        public ICommand CheckRadioButton => checkRadioButton ?? (checkRadioButton = new RelayCommand(x=>
+        public ICommand CheckPurchaseCommand => checkPurchaseCommand ?? (checkPurchaseCommand = new RelayCommand(x =>
         {
-            
+            flag = true;
+            try
+            {
+                GetRezult(flag);
+            }
+            catch { }
+
         }));
+        public ICommand CheckSaleCommand => checkSaleCommand ?? (checkSaleCommand = new RelayCommand(x =>
+         {
+             flag = false;
+             try
+             {
+                 GetRezult(flag);
+             }
+             catch { }
+         }));
 
         #endregion
-
     }
 }
