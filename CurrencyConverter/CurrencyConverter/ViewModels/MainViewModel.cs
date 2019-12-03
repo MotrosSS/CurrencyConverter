@@ -18,7 +18,7 @@ namespace CurrencyConverter.ViewModels
     public class MainViewModel : Notifier
     {
         private Organization selectedOrganization = new Organization();
-        private CourseTitle selectedCourse = new CourseTitle();
+        private CourseTitle selectedCourse ;
         private float sum;
         public bool flag;
 
@@ -45,6 +45,7 @@ namespace CurrencyConverter.ViewModels
             {
                 selectedOrganization = value;
                 GetRezult(flag);
+                
                 Notify();
             }
         }
@@ -56,6 +57,7 @@ namespace CurrencyConverter.ViewModels
                 sum = value;
                 GetRezult(flag);
                 Notify();
+               
             }
         }
         #endregion
@@ -69,7 +71,6 @@ namespace CurrencyConverter.ViewModels
             flag = true;
             GetOrganizations();
             GetExchangeRates();
-            GetUkraineBanks();
         }
 
         #region Methods
@@ -77,8 +78,10 @@ namespace CurrencyConverter.ViewModels
         private async void GetOrganizations()
         {
             FinanceManager financeManager = new FinanceManager();
+
             foreach (var item in await financeManager.GetBanks())
                 Organizations.Add(item);
+            GetUkraineBanks();
         }
 
         private async void GetExchangeRates()

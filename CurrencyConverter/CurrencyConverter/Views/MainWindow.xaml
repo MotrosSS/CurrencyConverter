@@ -10,9 +10,7 @@
     <Window.DataContext>
         <local:MainViewModel/>
     </Window.DataContext>
-
-
-
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -130,8 +128,7 @@
                     </DataGrid>
                 </Grid>
             </Border>
-
-
+            
             <!--All Banks-->
             <Border Grid.Column="1"
                     Margin="5"
@@ -201,5 +198,13 @@
                 </Grid>
             </Border>
         </Grid>
+        <Border Grid.Row="2"
+                BorderBrush="Black"
+                BorderThickness="2"
+                Margin="5">
+            
+            
+        </Border>
+        
     </Grid>
 </Window>
