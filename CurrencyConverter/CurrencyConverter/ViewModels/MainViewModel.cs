@@ -17,22 +17,24 @@ namespace CurrencyConverter.ViewModels
 {
     public class MainViewModel : Notifier
     {
-        public Organization selectedOrganization;
-        public bool flag;
+        private Organization selectedOrganization = new Organization();
+        private CourseTitle selectedCourse = new CourseTitle();
         private float sum;
+        public bool flag;
 
         #region Properties
         public ObservableCollection<Organization> Organizations { get; set; }
-        public ObservableCollection<CalculationResult> Results { get; set; }
         public ObservableCollection<CourseTitle> CalculationResults { get; set; }
+        public ObservableCollection<CalculationResult> Results { get; set; }
+        public ObservableCollection<Currenc> UkraineBanks { get; set; }
 
-        public float Sum
+        public CourseTitle SelectedCourse
         {
-            get => sum;
+            get => selectedCourse;
             set
             {
-                sum = value;
-                GetRezult(flag);
+                selectedCourse = value;
+                GetUkraineBanks();
                 Notify();
             }
         }
@@ -46,17 +48,28 @@ namespace CurrencyConverter.ViewModels
                 Notify();
             }
         }
+        public float Sum
+        {
+            get => sum;
+            set
+            {
+                sum = value;
+                GetRezult(flag);
+                Notify();
+            }
+        }
         #endregion
 
         public MainViewModel()
         {
-            GetOrganizations();
-            //GetExchangeRates();
             Organizations = new ObservableCollection<Organization>();
             Results = new ObservableCollection<CalculationResult>();
             CalculationResults = new ObservableCollection<CourseTitle>();
-            selectedOrganization = new Organization();
+            UkraineBanks = new ObservableCollection<Currenc>();
             flag = true;
+            GetOrganizations();
+            GetExchangeRates();
+            GetUkraineBanks();
         }
 
         #region Methods
@@ -65,19 +78,15 @@ namespace CurrencyConverter.ViewModels
         {
             FinanceManager financeManager = new FinanceManager();
             foreach (var item in await financeManager.GetBanks())
-            {
                 Organizations.Add(item);
-            }
         }
 
-        //private async void GetExchangeRates()
-        //{
-        //    FinanceManager financeManager = new FinanceManager();
-        //    foreach (var item in await financeManager.GetExchangeRates())
-        //    {
-        //        CalculationResults.Add(item);
-        //    }
-        //}
+        private async void GetExchangeRates()
+        {
+            FinanceManager financeManager = new FinanceManager();
+            foreach (var item in await financeManager.GetExchangeRates())
+                CalculationResults.Add(item);
+        }
 
         private void GetRezult(bool flag)
         {
@@ -94,7 +103,6 @@ namespace CurrencyConverter.ViewModels
                     calculation.Result = (float)Math.Round(calculation.Result, 2);
                     Results.Add(calculation);
                 }
-
             else
                 foreach (var item in selectedOrganization.Currencies)
                 {
@@ -107,6 +115,27 @@ namespace CurrencyConverter.ViewModels
                     calculation.Result = (float)Math.Round(calculation.Result, 2);
                     Results.Add(calculation);
                 }
+        }
+
+        private void GetUkraineBanks()
+        {
+            UkraineBanks.Clear();
+            foreach (var item in Organizations)
+            {
+                foreach (var res in item.Currencies)
+                {
+                    if (res.Name == selectedCourse.Abbreviation)
+                    {
+                        Currenc currenc = new Currenc
+                        {
+                            Name = item.Title,
+                            Purchase = res.Purchase,
+                            Sale = res.Sale
+                        };
+                        UkraineBanks.Add(currenc);
+                    }
+                }
+            }
         }
 
         #endregion
