@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CurrencyConverter.ViewModels"
         mc:Ignorable="d" 
-        Title="MainWindow" Height="500" Width="550">
+        Title="MainWindow" Height="400" Width="600">
 
     <Window.DataContext>
         <local:MainViewModel/>
@@ -14,7 +14,6 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
-            <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
 
@@ -90,45 +89,19 @@
 
                     <DataGrid Grid.Row="4" 
                               HeadersVisibility="None"
-                              ItemsSource="{Binding Results}"
+                              ItemsSource="{Binding Calculation}"
                               AutoGenerateColumns="False"
                               IsReadOnly="True">
                         <DataGrid.Columns>
-
-                            <DataGridTemplateColumn>
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Result}"
-                                               TextAlignment="Right"
-                                               Margin="5 0"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-
-                            <DataGridTemplateColumn >
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Name}"
-                                                   Margin="5 0"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-
-                            <DataGridTemplateColumn>
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding FinalCourse}"
-                                               
-                                               Margin="5 0"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-
+                            <DataGridTextColumn Binding="{Binding Result}"
+                                                TextBlock.TextAlignment="Right"/>
+                            <DataGridTextColumn Binding="{Binding Name}"/>
+                            <DataGridTextColumn Binding="{Binding FinalCourse}"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>
             </Border>
-            
+
             <!--All Banks-->
             <Border Grid.Column="1"
                     Margin="5"
@@ -146,65 +119,29 @@
                                FontWeight="Bold"/>
                     <ComboBox Grid.Row="1"
                               Margin="5" 
-                              ItemsSource="{Binding CalculationResults}"
+                              ItemsSource="{Binding ListOfCurrencies}"
                               SelectedItem="{Binding SelectedCourse,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                               SelectedIndex="0"
                               />
-                    
+
                     <DataGrid Grid.Row="2"
                               Margin="5"
                               IsReadOnly="True"
-                              ItemsSource="{Binding UkraineBanks}"
-                              CanUserSortColumns="True">
-                        <!--<DataGrid.Columns>
-                            
-                            <DataGridTemplateColumn Header="Банк"
-                                                    Width="125"
-                                                    >
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Name}"
-                                                   >
+                              ItemsSource="{Binding ListBanks}"
+                              AutoGenerateColumns="False">
 
-                                        </TextBlock>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Банк"
+                                                Binding="{Binding Name}"/>
+                            <DataGridTextColumn Header="Покупка"
+                                                Binding="{Binding Purchase}"/>
+                            <DataGridTextColumn Header="Продажа"
+                                                Binding="{Binding Sale}"/>
+                        </DataGrid.Columns>
 
-                            <DataGridTemplateColumn Header="Покупка"
-                                                    CanUserSort="True"
-                                                    SortDirection="Descending">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Purchase}">
-
-                                        </TextBlock>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-
-                            <DataGridTemplateColumn Header="Продажа">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Sale}"
-                                                   >
-
-                                        </TextBlock>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                        </DataGrid.Columns>-->
                     </DataGrid>
                 </Grid>
             </Border>
         </Grid>
-        <Border Grid.Row="2"
-                BorderBrush="Black"
-                BorderThickness="2"
-                Margin="5">
-            
-            
-        </Border>
-        
     </Grid>
 </Window>

@@ -7,11 +7,10 @@ using System.Threading.Tasks;
 
 namespace CurrencyConverter.Models
 {
-    public class CourseTitle : Notifier
+    public class Currency : Notifier
     {
         private string abbreviation;
         private string decodingAbbreviations;
-
 
         #region Properties
         public string Abbreviation

@@ -8,11 +8,12 @@ using System.Threading.Tasks;
 
 namespace CurrencyConverter.Models
 {
-    public class Currenc : Notifier
+    public class Course : Notifier
     {
         private string name;
         private float purchase;
         private float sale;
+        private string date;
 
         #region Properties
         public string Name
@@ -47,7 +48,22 @@ namespace CurrencyConverter.Models
             }
         }
 
-        
+        public string Date
+        {
+            get => date;
+            set
+            {
+                date = value;
+                Notify();
+            }
+
+        }
+        public int CurrencId { get; set; }
+        public string OrganizationId { get; set; }
+
+        public virtual Organization Organizations { get; set; }
+
+
         #endregion
 
     }

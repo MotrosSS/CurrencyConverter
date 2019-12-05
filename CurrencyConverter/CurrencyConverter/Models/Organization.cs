@@ -14,7 +14,7 @@ namespace CurrencyConverter.Models
 
         private string title;
         private string id;
-        private ObservableCollection<Currenc> currencies;
+        private ObservableCollection<Course> currencies;
 
 
         #region Properties
@@ -41,7 +41,7 @@ namespace CurrencyConverter.Models
         }
 
         [JsonProperty(PropertyName = "")]
-        public ObservableCollection<Currenc> Currencies
+        public virtual ObservableCollection<Course> Currencies
         {
             get => currencies;
             set
@@ -55,7 +55,7 @@ namespace CurrencyConverter.Models
 
         public Organization()
         {
-            currencies = new ObservableCollection<Currenc>();
+            currencies = new ObservableCollection<Course>();
         }
 
        

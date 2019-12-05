@@ -1,10 +1,12 @@
-﻿using CurrencyConverter.Models;
+﻿using CurrencyConverter.Context;
+using CurrencyConverter.Models;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace CurrencyConverter.Infrastructure
@@ -12,6 +14,7 @@ namespace CurrencyConverter.Infrastructure
     class FinanceManager
     {
         public NetworkManager networkManager;
+
         public FinanceManager()
         {
             networkManager = new NetworkManager();
@@ -21,10 +24,11 @@ namespace CurrencyConverter.Infrastructure
             return Task.Run(() =>
             {
                 ObservableCollection<Organization> banks = new ObservableCollection<Organization>();
-
                 string json = networkManager.GetJson();
                 JObject obj = JObject.Parse(json);
                 IList<JToken> organizations = obj["organizations"].Children().ToList();
+
+                string date = obj["date"].ToString();
 
                 foreach (JToken item in organizations)
                 {
@@ -32,8 +36,9 @@ namespace CurrencyConverter.Infrastructure
                     IList<JToken> jtoken = item["currencies"].Children().ToList();
                     foreach (JProperty res in jtoken)
                     {
-                        Currenc currenc = new Currenc();
-                        currenc = res.Value.ToObject<Currenc>();
+                        Course currenc = new Course();
+                        currenc = res.Value.ToObject<Course>();
+                        currenc.Date = date;
                         currenc.Name = res.Name;
                         organization.Currencies.Add(currenc);
                     }
@@ -43,11 +48,12 @@ namespace CurrencyConverter.Infrastructure
             });
         }
 
-        public Task<ObservableCollection<CourseTitle>> GetExchangeRates()
+        public Task<ObservableCollection<Currency>> GetExchangeRates()
         {
+
             return Task.Run(() =>
             {
-                ObservableCollection<CourseTitle> results = new ObservableCollection<CourseTitle>();
+                ObservableCollection<Currency> results = new ObservableCollection<Currency>();
 
                 string json = networkManager.GetJson();
                 JObject obj = JObject.Parse(json);
@@ -55,13 +61,34 @@ namespace CurrencyConverter.Infrastructure
 
                 foreach (JProperty res in currencies)
                 {
-                    CourseTitle calculation = new CourseTitle();
+                    Currency calculation = new Currency();
                     calculation.Abbreviation = res.Name;
                     calculation.DecodingAbbreviations = res.Value.ToString();
-
                     results.Add(calculation);
                 }
                 return results;
+            });
+        }
+
+        public void SendDataInDatabase()
+        {
+            Task.Run(() =>
+            {
+                using (FinanceContext context = new FinanceContext())
+                {
+                    foreach (var item in context.Organizations)
+                    {
+                        foreach (var curr in item.Currencies)
+                        {
+                            curr.OrganizationId = item.Id;
+                            context.Currencs.Add(curr);
+                            context.SaveChanges();
+                        }
+                        context.Organizations.Add(item);
+                        context.SaveChanges();
+                    }
+                }
+
             });
         }
     }
