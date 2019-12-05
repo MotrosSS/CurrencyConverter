@@ -44,6 +44,7 @@ namespace CurrencyConverter.Infrastructure
                     }
                     banks.Add(organization);
                 }
+                SendDataInDatabase(banks);
                 return banks;
             });
         }
@@ -70,25 +71,33 @@ namespace CurrencyConverter.Infrastructure
             });
         }
 
-        public void SendDataInDatabase()
+        public void SendDataInDatabase(ObservableCollection<Organization> organization)
         {
             Task.Run(() =>
             {
-                using (FinanceContext context = new FinanceContext())
+                try
                 {
-                    foreach (var item in context.Organizations)
+                    using (var context = new FinanceContext())
                     {
-                        foreach (var curr in item.Currencies)
-                        {
-                            curr.OrganizationId = item.Id;
-                            context.Currencs.Add(curr);
-                            context.SaveChanges();
-                        }
-                        context.Organizations.Add(item);
-                        context.SaveChanges();
+                        if (context.Organizations.Count() != 0)
+                            foreach (var item in organization)
+                            {
+                                foreach (var curr in item.Currencies)
+                                {
+                                    curr.OrganizationId = item.Id;
+                                    context.Currencs.Add(curr);
+                                    context.SaveChanges();
+                                }
+                            }
+                        else
+                            foreach (var item in organization)
+                            {
+                                context.Organizations.Add(item);
+                                context.SaveChanges();
+                            }
                     }
                 }
-
+                catch { }
             });
         }
     }

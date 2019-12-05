@@ -58,7 +58,7 @@ namespace CurrencyConverter.Models
             }
 
         }
-        public int CurrencId { get; set; }
+        public int CourseId { get; set; }
         public string OrganizationId { get; set; }
 
         public virtual Organization Organizations { get; set; }

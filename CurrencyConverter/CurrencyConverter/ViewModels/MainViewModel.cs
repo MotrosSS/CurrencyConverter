@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Text.RegularExpressions;
 using System.Windows;
 using CurrencyConverter.Context;
+using System.Threading;
 
 namespace CurrencyConverter.ViewModels
 {
@@ -83,9 +84,6 @@ namespace CurrencyConverter.ViewModels
 
             foreach (var item in await financeManager.GetExchangeRates())
                 ListOfCurrencies.Add(item);
-
-          
-            financeManager.SendDataInDatabase();
         }
 
      
